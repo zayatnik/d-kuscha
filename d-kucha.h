@@ -23,6 +23,18 @@ public:
 
 	int leftchild(int i) {
 		int ind = i * 2 + 1;
+		if (ind > size - 1){
+			int *tmp = new int[size*2];
+			for (int i = 0; i < size; i++) {
+				tmp[i] = mas[i];
+			}
+			for (int i = size; i < size * 2; i++) {
+				tmp[i] = 0;
+			}
+			delete[] mas;
+			mas = tmp;
+			size = size*2;
+		}
 		return ind;
 	}
 
@@ -38,9 +50,9 @@ public:
 
 	int minchild(int i) {
 		if (mas[leftchild(i)] <= mas[rightchild(i)])
-			return (i * 2 + 1);
+			return leftchild(i);
 		else
-			return (i * 2 + 2);
+			return rightchild(i);
 	}
 
 	void diving(int i) {
@@ -65,13 +77,16 @@ public:
 
 	void insert(int w) {
 		if (heapsize == size) {
-			int *tmp = new int[size + 1];
+			int *tmp = new int[size * 2];
 			for (int i = 0; i < size; i++) {
 				tmp[i] = mas[i];
 			}
+			for (int i = size; i < size * 2; i++) {
+				tmp[i] = 0;
+			}
 			delete[] mas;
 			mas = tmp;
-			size += 1;
+			size = size * 2;
 		}
 			heapsize += 1;
 			mas[heapsize - 1] = w;
