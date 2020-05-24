@@ -12,7 +12,6 @@ public:
 		mas = new int[1];
 		size = 1;
 		heapsize = 0;
-		mas[0] = 0;
 	}
 
 	~kucha() {
@@ -23,36 +22,38 @@ public:
 
 	int leftchild(int i) {
 		int ind = i * 2 + 1;
-		if (ind > size - 1){
-			int *tmp = new int[size*2];
-			for (int i = 0; i < size; i++) {
-				tmp[i] = mas[i];
-			}
-			for (int i = size; i < size * 2; i++) {
-				tmp[i] = 0;
-			}
-			delete[] mas;
-			mas = tmp;
-			size = size*2;
-		}
-		return ind;
+		if (ind > size - 1)
+			return (-1);
+		else
+			return ind;
 	}
 
 	int rightchild(int i) {
 		int ind = i * 2 + 2;
-		return ind;
+		if (ind > size - 1)
+			return (-1);
+		else
+			return ind;
 	}
 
 	int parent(int i) {
-		int ind = (i - 1) / 2;
-		return ind;
+		if (i == 0)
+			return (-1);
+		else
+			return ((i - 1) / 2);
 	}
 
 	int minchild(int i) {
-		if (mas[leftchild(i)] <= mas[rightchild(i)])
+		if ((leftchild(i) >= 0) && (rightchild(i) >= 0)) {
+			if (mas[leftchild(i)] <= mas[rightchild(i)])
+				return leftchild(i);
+			else
+				return rightchild(i);
+		}
+		if ((leftchild(i) >= 0) && (rightchild(i) <= 0))
 			return leftchild(i);
-		else
-			return rightchild(i);
+		if ((leftchild(i) <= 0) && (rightchild(i) <= 0))
+			return (-1);
 	}
 
 	void diving(int i) {
@@ -81,9 +82,6 @@ public:
 			for (int i = 0; i < size; i++) {
 				tmp[i] = mas[i];
 			}
-			for (int i = size; i < size * 2; i++) {
-				tmp[i] = 0;
-			}
 			delete[] mas;
 			mas = tmp;
 			size = size * 2;
@@ -95,7 +93,6 @@ public:
 
 	void deletemin() {
 		mas[0] = mas[heapsize - 1];
-		mas[heapsize - 1] = 0;
 		heapsize -= 1;
 		diving(0);
 	}
@@ -110,22 +107,8 @@ public:
 		deletemin();
 	}
 
-	void makeheap(kucha w) {
-		for (int i = w.heapsize - 1; i >= 0; i--)
-			diving(i);
-	}
-
-	void heapsort(kucha w){
-		makeheap(w);
-		for (int i = 0; i < w.size - 1; i++) {
-			swap(w.mas[0], w.mas[w.heapsize - 1]);
-			w.heapsize -= 1;
-			diving(0);
-		}
-	}
-
 	void print() {
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < heapsize; i++)
 			cout << mas[i] << " ";
 	}
 };
